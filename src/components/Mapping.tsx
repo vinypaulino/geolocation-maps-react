@@ -8,8 +8,10 @@ import { sample, shuffle } from "lodash";
 import { RouteExistsError } from "../errors/route-exists.error";
 import { useSnackbar } from "notistack";
 import { Navbar } from "./Navbar";
+import { io } from "socket.io-client";
+import type { Socket } from "socket.io-client";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL as string;
 
 const googleMapsLoader = new Loader(process.env.REACT_APP_GOOGLE_API_KEY);
 
@@ -46,7 +48,14 @@ export const Mapping: React.FunctionComponent = () => {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [routeIdSelected, setRouteIdSelected] = useState<string>("");
   const mapRef = useRef<Map>();
+  const socketIORef = useRef<Socket | undefined>();
+
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    socketIORef.current = io.connect(API_URL);
+    socketIORef.current.on("connect", () => console.log("conectado"));
+  }, []);
 
   useEffect(() => {
     fetch(`${API_URL}/routes`)
