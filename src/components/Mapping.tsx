@@ -8,8 +8,7 @@ import { sample, shuffle } from "lodash";
 import { RouteExistsError } from "../errors/route-exists.error";
 import { useSnackbar } from "notistack";
 import { Navbar } from "./Navbar";
-import { io } from "socket.io-client";
-import type { Socket } from "socket.io-client";
+import * as io from "socket.io-client";
 
 const API_URL = process.env.REACT_APP_API_URL as string;
 
@@ -48,7 +47,7 @@ export const Mapping: React.FunctionComponent = () => {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [routeIdSelected, setRouteIdSelected] = useState<string>("");
   const mapRef = useRef<Map>();
-  const socketIORef = useRef<Socket | undefined>();
+  const socketIORef = useRef<SocketIOClient.Socket | undefined>();
 
   const { enqueueSnackbar } = useSnackbar();
 
